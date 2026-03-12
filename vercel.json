@@ -1,6 +1,10 @@
 {
-  "env": {
-    "Database_key_supabase": "@Database_key_supabase",
-    "URL_supabase": "@URL_supabase"
-  }
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
+  ]
 }
