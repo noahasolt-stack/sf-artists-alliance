@@ -1,20 +1,17 @@
 export default function handler(req, res) {
-  // Only allow GET requests
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // Return the Supabase credentials from environment variables
   const supabaseUrl = process.env.URL_supabase;
   const supabaseAnonKey = process.env.Database_key_supabase;
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return res.status(500).json({ error: 'Missing environment variables' });
-  }
+  console.log('API called - URL:', supabaseUrl ? 'exists' : 'missing');
+  console.log('API called - Key:', supabaseAnonKey ? 'exists' : 'missing');
 
-  // Set CORS headers to allow requests from your domain
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'application/json');
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return res.status(500).json({ 
+      error: 'Missing environment variables',
+      url: supabaseUrl ? 'found' : 'not found',
+      key: supabaseAnonKey ? 'found' : 'not found'
+    });
+  }
 
   return res.status(200).json({
     url: supabaseUrl,
