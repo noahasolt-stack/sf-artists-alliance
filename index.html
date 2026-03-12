@@ -528,19 +528,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Get environment variables
-        const SUPABASE_URL = 'https://xluasnexxceuhpaadyvc.supabase.co';
-        const SUPABASE_ANON_KEY = '{{ process.env.Database_key_supabase }}';
-
-        // Initialize Supabase client
         let supabaseClient = null;
 
-        if (SUPABASE_ANON_KEY && SUPABASE_ANON_KEY !== '{{ process.env.Database_key_supabase }}') {
-            const { createClient } = window.supabase;
-            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } else {
-            console.warn('Supabase key not configured. Check environment variables in Vercel.');
+        // Fetch Supabase credentials from the serverless function
+        async function initializeSupabase() {
+            try {
+                const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch Supabase config');
+                }
+                
+                const { url, key } = await response.json();
+                const { createClient } = window.supabase;
+                supabaseClient = createClient(url, key);
+                console.log('✓ Supabase initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                return false;
+            }
         }
+
+        // Initialize on page load
+        initializeSupabase();
 
         const form = document.getElementById('intakeForm');
         const successMessage = document.getElementById('successMessage');
