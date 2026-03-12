@@ -1,0 +1,6 @@
+{
+  "env": {
+    "Database_key_supabase": "@Database_key_supabase",
+    "URL_supabase": "@URL_supabase"
+  }
+}
